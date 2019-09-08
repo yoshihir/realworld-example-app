@@ -1,0 +1,117 @@
+{
+  "taskDefinition": {
+    "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:************:task-definition/realworld:41",
+    "containerDefinitions": [
+      {
+        "name": "realworld-app",
+        "image": "************.dkr.ecr.ap-northeast-1.amazonaws.com/realworld/app",
+        "cpu": 512,
+        "memory": 1024,
+        "portMappings": [
+          {
+            "containerPort": 9000,
+            "hostPort": 9000,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "environment": [
+          {
+            "name": "DD_LOGS_INJECTION",
+            "value": "true"
+          },
+          {
+            "name": "DD_SERVICE_NAME",
+            "value": "realworld-api"
+          }
+        ],
+        "mountPoints": [],
+        "volumesFrom": [],
+        "dockerLabels": {
+          "com.datadoghq.ad.check_names": "realworld-api",
+          "com.datadoghq.ad.init_configs": "[{}]",
+          "com.datadoghq.ad.instances": "[{\"host\": \"%%host%%\", \"port\": 9000}]"
+        },
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/realworld",
+            "awslogs-region": "ap-northeast-1",
+            "awslogs-stream-prefix": "ecs"
+          }
+        }
+      },
+      {
+        "name": "realworld-datadog",
+        "image": "datadog/agent:latest",
+        "cpu": 256,
+        "memory": 512,
+        "portMappings": [],
+        "essential": true,
+        "environment": [
+          {
+            "name": "ECS_FARGATE",
+            "value": "true"
+          },
+          {
+            "name": "DD_APM_ENABLED",
+            "value": "true"
+          },
+          {
+            "name": "DD_API_KEY",
+            "value": "{DD_API_KEY}"
+          },
+          {
+            "name": "DD_CHECKS_TAG_CARDINALITY",
+            "value": "high"
+          }
+        ],
+        "mountPoints": [],
+        "volumesFrom": []
+      }
+    ],
+    "family": "realworld",
+    "taskRoleArn": "arn:aws:iam::************:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::************:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 31,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+      {
+        "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+      },
+      {
+        "name": "ecs.capability.execution-role-awslogs"
+      },
+      {
+        "name": "com.amazonaws.ecs.capability.ecr-auth"
+      },
+      {
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+      },
+      {
+        "name": "com.amazonaws.ecs.capability.task-iam-role"
+      },
+      {
+        "name": "ecs.capability.execution-role-ecr-pull"
+      },
+      {
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+      },
+      {
+        "name": "ecs.capability.task-eni"
+      }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+      "EC2",
+      "FARGATE"
+    ],
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048"
+  }
+}

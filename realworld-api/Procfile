@@ -1,0 +1,1 @@
+web: target/universal/stage/bin/real-world-example-project -Dhttp.port=${PORT} -DapplyEvolutions.default=true

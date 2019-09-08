@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+  pre_build:
+    commands:
+      - npm install
+  build:
+    commands:
+      - npm run-script build
+  post_build:
+    commands:
+      - aws s3 sync ./build/ s3://${BUCKET_NAME} --exact-timestamps
+      - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths '/*'
